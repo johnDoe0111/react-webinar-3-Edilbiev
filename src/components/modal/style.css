@@ -1,0 +1,42 @@
+.modal {
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal__content {
+  padding: 0px 0px 89px 0;
+  border-radius: 10px;
+  width: 960px;
+  background-color: white;
+}
+
+.basket-list__item {
+  border-bottom: 1px dashed #ccc;
+  font-family: "Arimo", sans-serif;
+}
+
+.basket-list__item:nth-child(1) {
+  border-top: 1px dashed #ccc;
+}
+
+.items-sum {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 121px;
+}
+
+.items-sum p {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.total-price {
+  margin-left: 53px;
+}

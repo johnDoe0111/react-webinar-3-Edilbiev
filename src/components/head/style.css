@@ -1,0 +1,21 @@
+.Head {
+  height: 80px;
+  background: #f5f5f5;
+  font-family: "Arimo", sans-serif;
+}
+
+.Head h1 {
+  margin: 0;
+  padding: 20px 20px 10px;
+}
+
+.active-head {
+  height: 80px;
+  background: #f5f5f5;
+  font-family: "Arimo", sans-serif;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-radius: 10px;
+}

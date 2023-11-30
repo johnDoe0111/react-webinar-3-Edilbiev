@@ -1,0 +1,19 @@
+.Controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 20px;
+  font-family: "Arimo", sans-serif;
+}
+
+.basket {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+  font-size: 18px;
+}
+
+.basket span {
+  font-size: 18px;
+  font-weight: 700;
+}

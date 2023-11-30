@@ -5,14 +5,6 @@ class Store {
   constructor(initState = {}) {
     this.state = initState;
     this.listeners = []; // Слушатели изменений состояния
-    this.counter = this.calculateInitialCounter();
-  }
-
-  calculateInitialCounter() {
-    const maxCode = this.state.list
-      ? Math.max(...this.state.list.map((item) => item.code), 0)
-      : 0;
-    return maxCode + 1;
   }
 
   /**
@@ -47,21 +39,30 @@ class Store {
   }
 
   /**
-   * Добавление новой записи
-   *
+   * Добавление товара в корзину
    */
-  addItem() {
-    const newItem = {
-      code: this.counter,
-      title: "Новая запись",
-      views: 0,
-    };
+  addItemInBasket(item) {
+    const existingItem = this.state.basketList.find(
+      (basketItem) => basketItem.code === item.code
+    );
 
-    this.setState({
-      list: [...this.state.list, newItem],
-    });
+    if (existingItem) {
+      const updatedBasket = this.state.basketList.map((basketItem) =>
+        basketItem.code === item.code
+          ? { ...basketItem, quantity: basketItem.quantity + 1 }
+          : basketItem
+      );
 
-    this.counter++;
+      this.setState({
+        ...this.state,
+        basketList: updatedBasket,
+      });
+    } else {
+      this.setState({
+        ...this.state,
+        basketList: [...this.state.basketList, { ...item, quantity: 1 }],
+      });
+    }
   }
 
   /**
@@ -69,32 +70,28 @@ class Store {
    * @param code
    */
   deleteItem(code) {
-    this.setState({
-      ...this.state,
-      list: this.state.list.filter((item) => item.code !== code),
-    });
-  }
+    const itemIndex = this.state.basketList.findIndex(
+      (item) => item.code === code
+    );
 
-  /**
-   * Выделение записи по коду
-   * @param code
-   */
-  selectItem(code) {
-    this.setState({
-      ...this.state,
-      list: this.state.list.filter((item) => {
-        if (item.code === code) {
-          item.selected = !item.selected;
-          if (item.selected && item.code === code) {
-            item.views++;
-          }
-        } else {
-          item.selected = "";
-          item.views = item.views + 0;
-        }
-        return item;
-      }),
-    });
+    if (itemIndex !== -1) {
+      const updatedBasket = [...this.state.basketList];
+      const itemToDelete = updatedBasket[itemIndex];
+
+      if (itemToDelete.quantity > 1) {
+        updatedBasket[itemIndex] = {
+          ...itemToDelete,
+          quantity: itemToDelete.quantity - 1,
+        };
+      } else {
+        updatedBasket.splice(itemIndex, 1);
+      }
+
+      this.setState({
+        ...this.state,
+        basketList: updatedBasket,
+      });
+    }
   }
 }
 

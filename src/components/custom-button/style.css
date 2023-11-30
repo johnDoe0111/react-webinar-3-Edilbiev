@@ -1,0 +1,11 @@
+button {
+  font-size: 13px;
+  color: #000;
+  background-color: #fff;
+  border: 1px solid #767676;
+  border-radius: 2px;
+  font-family: "Arimo";
+  cursor: pointer;
+  width: 76px;
+  height: 21px;
+}

@@ -1,0 +1,8 @@
+.List-item {
+  border-bottom: 1px dashed #ccc;
+  font-family: "Arimo", sans-serif;
+}
+
+.List-item:nth-child(1) {
+  border-top: 1px dashed #ccc;
+}
