@@ -47,11 +47,16 @@ class Store {
     );
 
     if (existingItem) {
-      const updatedBasket = this.state.basketList.map((basketItem) =>
-        basketItem.code === item.code
-          ? { ...basketItem, quantity: basketItem.quantity + 1 }
-          : basketItem
-      );
+      const updatedBasket = this.state.basketList.map((basketItem) => {
+        if (basketItem.code === item.code) {
+          return {
+            ...basketItem,
+            quantity: basketItem.quantity === 1 ? 1 : basketItem.quantity + 1,
+            totalPrice: basketItem.totalPrice + item.price,
+          };
+        }
+        return basketItem;
+      });
 
       this.setState({
         ...this.state,
@@ -60,9 +65,23 @@ class Store {
     } else {
       this.setState({
         ...this.state,
-        basketList: [...this.state.basketList, { ...item, quantity: 1 }],
+        basketList: [
+          ...this.state.basketList,
+          { ...item, quantity: 1, totalPrice: item.price },
+        ],
       });
     }
+
+    const totalQuantity = this.state.basketList.reduce(
+      (total, item) => total + item.quantity,
+      0
+    );
+    const totalPrice = this.state.basketList.reduce(
+      (total, item) => total + item.totalPrice,
+      0
+    );
+
+    return { totalQuantity, totalPrice };
   }
 
   /**
@@ -70,28 +89,41 @@ class Store {
    * @param code
    */
   deleteItem(code) {
-    const itemIndex = this.state.basketList.findIndex(
-      (item) => item.code === code
+    // На случай, если я неправильно понял правку про удаление(здесь удаление одного товара, а не всего его кол-ва)
+
+    // const itemIndex = this.state.basketList.findIndex(
+    //   (item) => item.code === code
+    // );
+
+    // if (itemIndex !== -1) {
+    //   const updatedBasket = [...this.state.basketList];
+    //   const itemToDelete = updatedBasket[itemIndex];
+
+    //   if (itemToDelete.quantity > 1) {
+    //     updatedBasket[itemIndex] = {
+    //       ...itemToDelete,
+    //       quantity: itemToDelete.quantity - 1,
+    //     };
+    //   } else {
+    //     updatedBasket.splice(itemIndex, 1);
+    //   }
+    // }
+
+    this.setState({
+      ...this.state,
+      basketList: this.state.basketList.filter((item) => item.code !== code),
+    });
+
+    const totalQuantity = this.state.basketList.reduce(
+      (total, item) => total + item.quantity,
+      0
+    );
+    const totalPrice = this.state.basketList.reduce(
+      (total, item) => total + item.price,
+      0
     );
 
-    if (itemIndex !== -1) {
-      const updatedBasket = [...this.state.basketList];
-      const itemToDelete = updatedBasket[itemIndex];
-
-      if (itemToDelete.quantity > 1) {
-        updatedBasket[itemIndex] = {
-          ...itemToDelete,
-          quantity: itemToDelete.quantity - 1,
-        };
-      } else {
-        updatedBasket.splice(itemIndex, 1);
-      }
-
-      this.setState({
-        ...this.state,
-        basketList: updatedBasket,
-      });
-    }
+    return { totalQuantity, totalPrice };
   }
 }
 

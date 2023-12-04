@@ -2,10 +2,10 @@ import PropTypes from "prop-types";
 import React from "react";
 import "./style.css";
 
-const CustomButton = ({ title, active, setActive, onAdd, onDelete }) => {
+const CustomButton = ({ title, setActive, onAdd, onDelete }) => {
   const buttonConfigs = {
-    Перейти: { onClick: () => setActive(!active) },
-    Закрыть: { onClick: () => setActive(!active) },
+    Перейти: { onClick: () => setActive(true) },
+    Закрыть: { onClick: () => setActive(false) },
     Добавить: { onClick: onAdd },
     Удалить: { onClick: onDelete },
   };
@@ -17,7 +17,6 @@ const CustomButton = ({ title, active, setActive, onAdd, onDelete }) => {
 
 CustomButton.propTypes = {
   title: PropTypes.string.isRequired,
-  active: PropTypes.bool,
   setActive: PropTypes.func,
   onAdd: PropTypes.func,
   onDelete: PropTypes.func,

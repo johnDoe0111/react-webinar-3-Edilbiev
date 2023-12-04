@@ -3,7 +3,7 @@ import React from "react";
 import CustomButton from "../custom-button";
 import "./style.css";
 
-function Controls({ active, setActive, basketQuantity, totalPrice }) {
+function Controls({ setActive, basketInfo }) {
   function getNounForm(number, one, few, many) {
     if (number === 0) {
       return many;
@@ -34,37 +34,26 @@ function Controls({ active, setActive, basketQuantity, totalPrice }) {
           <p>
             В корзине:{" "}
             <span>
-              {basketQuantity
-                ? `${basketQuantity} ${getNounForm(
-                    basketQuantity,
+              {basketInfo.totalQuantity && basketInfo.totalPrice !== 0
+                ? `${basketInfo.totalQuantity} ${getNounForm(
+                    basketInfo.totalQuantity,
                     "товар",
                     "товара",
                     "товаров"
-                  )} / ${totalPrice()} ₽`
+                  )} / ${basketInfo.totalPrice} ₽`
                 : "пусто"}
             </span>
           </p>
         </div>
       </div>
-      <CustomButton title="Перейти" active={active} setActive={setActive} />
+      <CustomButton title="Перейти" setActive={setActive} />
     </div>
   );
 }
 
 Controls.propTypes = {
-  active: PropTypes.bool.isRequired,
   setActive: PropTypes.func,
-  basketQuantity: PropTypes.number,
-  totalPrice: PropTypes.func,
+  basketInfo: PropTypes.object,
 };
 
 export default React.memo(Controls);
-
-// const buttonConfigs = {
-//   Перейти: { onClick: () => setActive(!active) },
-//   Закрыть: { onClick: () => setActive(!active) },
-//   Добавить: { onClick: onAdd },
-//   Удалить: { onClick: onDelete },
-// };
-
-// const config = buttonConfigs[title] || {};

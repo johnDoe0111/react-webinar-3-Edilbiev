@@ -1,0 +1,21 @@
+.modal__content {
+  padding: 0px 0px 89px 0;
+  border-radius: 10px;
+  width: 960px;
+  background-color: white;
+}
+
+.items-sum {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 121px;
+}
+
+.items-sum p {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.total-price {
+  margin-left: 53px;
+}

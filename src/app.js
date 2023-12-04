@@ -1,8 +1,9 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useState } from "react";
+import BasketModal from "./components/basket-modal";
 import Controls from "./components/controls";
 import Head from "./components/head";
 import List from "./components/list";
-import Modal from "./components/modal";
+import ModalLayout from "./components/modal-layout";
 import PageLayout from "./components/page-layout";
 
 /**
@@ -12,55 +13,48 @@ import PageLayout from "./components/page-layout";
  */
 function App({ store }) {
   const [modalActive, setModalActive] = useState(false);
+  const [basketInfo, setBasketInfo] = useState({
+    totalQuantity: 0,
+    totalPrice: 0,
+  });
 
   const list = store.getState().list;
   const basketList = store.getState().basketList;
-  const basketQuantity = useMemo(() => {
-    return basketList.reduce((total, item) => total + item.quantity, 0);
-  }, [basketList]);
-
-  const getTotalPrice = () => {
-    return basketList.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0
-    );
-  };
 
   const callbacks = {
     onAddItemInBasket: useCallback(
       (item) => {
-        store.addItemInBasket(item);
+        const { totalQuantity, totalPrice } = store.addItemInBasket(item);
+        setBasketInfo({ totalQuantity, totalPrice });
       },
       [store]
     ),
     onDeleteItem: useCallback(
       (code) => {
-        store.deleteItem(code);
+        const { totalQuantity, totalPrice } = store.deleteItem(code);
+        setBasketInfo({ totalQuantity, totalPrice });
       },
       [store]
     ),
-    onUpdateTotalPrice: useCallback(() => {
-      store.updateTotalPrice();
-    }, [store]),
   };
 
   return (
     <PageLayout>
       <Head title="Магазин" active={modalActive} setActive={setModalActive} />
-      <Controls
-        active={modalActive}
-        setActive={setModalActive}
-        basketQuantity={basketQuantity}
-        totalPrice={getTotalPrice}
-      />
+      <Controls setActive={setModalActive} basketInfo={basketInfo} />
       <List list={list} onAddItemInBasket={callbacks.onAddItemInBasket} />
-      <Modal
-        active={modalActive}
-        setActive={setModalActive}
-        basketList={basketList}
-        onDeleteItem={callbacks.onDeleteItem}
-        totalPrice={getTotalPrice}
-      />
+
+      {modalActive ? (
+        <ModalLayout setActive={setModalActive}>
+          <BasketModal
+            active={modalActive}
+            setActive={setModalActive}
+            basketList={basketList}
+            onDeleteItem={callbacks.onDeleteItem}
+            totalPrice={basketInfo.totalPrice}
+          />
+        </ModalLayout>
+      ) : null}
     </PageLayout>
   );
 }
